@@ -63,6 +63,9 @@ jobs:
       base_ref:             ${{ inputs.base_ref }}
       model:                ${{ inputs.model }}
       skip_sync:            ${{ inputs.skip_sync }}
+      # TESTING: check out the hub's composite actions/tools from the feature branch.
+      # Remove this line for the production PR (then @v1's default branch is used).
+      tooling_ref:          task/expo-wrapper-sync
     secrets:
       app_id:            ${{ secrets.CLEVERTAP_WRAPPER_SYNC_APP_ID }}
       app_private_key:   ${{ secrets.CLEVERTAP_WRAPPER_SYNC_PRIVATE_KEY }}
