@@ -1,0 +1,70 @@
+name: native-release-sync
+
+# Manually-dispatched entry point for syncing the CleverTap Expo plugin with a
+# new clevertap-react-native release and/or a new Expo SDK version.
+#
+# This is a thin wrapper: it collects the target versions and routes all the
+# real work to the reusable workflow in the central tooling repo
+# (clevertap-wrapper-tooling). Claude runs headless there, bumps versions,
+# propagates native-integration-step changes, builds the CTExample app, and
+# opens a PR for review.
+#
+# Unlike the React Native / Flutter / Cordova wrappers, the Expo plugin is a
+# config plugin (it surfaces no SDK methods). It is driven by a target
+# clevertap-react-native version + Expo SDK version, NOT a native Android/iOS
+# module/version pair — the required native SDK versions are auto-resolved from
+# the clevertap-react-native release.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   CLEVERTAP_WRAPPER_SYNC_APP_ID       - clevertap-wrapper-sync GitHub App id
+#   CLEVERTAP_WRAPPER_SYNC_PRIVATE_KEY  - that App's private key (.pem contents)
+#   ANTHROPIC_API_KEY                   - Anthropic API key
+#   SLACK_WEBHOOK_URL                   - Slack webhook for failure pings
+
+on:
+  workflow_dispatch:
+    inputs:
+      clevertap_rn_version:
+        description: 'Target clevertap-react-native version (e.g. 4.1.0).'
+        type: string
+        default: ''
+      expo_sdk_version:
+        description: 'Target Expo SDK version (e.g. 56).'
+        type: string
+        default: ''
+      release_name:
+        description: 'Optional branch suffix (defaults to today YYYY-MM-DD)'
+        type: string
+        default: ''
+      base_ref:
+        description: 'Branch to sync from / open PR against (default develop; use a test baseline branch for testing)'
+        type: string
+        default: 'develop'
+      model:
+        description: 'Claude model (alias)'
+        type: choice
+        options: [sonnet, opus, haiku]
+        default: sonnet
+      skip_sync:
+        description: 'Skip Claude Sync + post-sync builds (pre-sync build still runs). Use for debugging the build pipeline without Claude cost.'
+        type: boolean
+        default: false
+
+jobs:
+  sync:
+    # TESTING: pinned to the feature branch on the hub. Flip back to @v1 before the
+    # production PR into CleverTap/clevertap-expo-plugin.
+    uses: CleverTap/clevertap-wrapper-tooling/.github/workflows/sync.yml@task/expo-wrapper-sync
+    with:
+      wrapper:              expo
+      clevertap_rn_version: ${{ inputs.clevertap_rn_version }}
+      expo_sdk_version:     ${{ inputs.expo_sdk_version }}
+      release_name:         ${{ inputs.release_name }}
+      base_ref:             ${{ inputs.base_ref }}
+      model:                ${{ inputs.model }}
+      skip_sync:            ${{ inputs.skip_sync }}
+    secrets:
+      app_id:            ${{ secrets.CLEVERTAP_WRAPPER_SYNC_APP_ID }}
+      app_private_key:   ${{ secrets.CLEVERTAP_WRAPPER_SYNC_PRIVATE_KEY }}
+      anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+      slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
