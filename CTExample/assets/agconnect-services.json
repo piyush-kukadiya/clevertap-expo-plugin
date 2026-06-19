@@ -1,2 +1,17 @@
 {
+  "agcgw": {
+    "backurl": "https://connect-drcn.hispace.hicloud.com",
+    "url": "https://connect-drcn.dbankcloud.cn"
+  },
+  "client": {
+    "cp_id": "0",
+    "product_id": "0",
+    "client_id": "0",
+    "client_secret": "0",
+    "project_id": "0",
+    "app_id": "0",
+    "api_key": "0",
+    "package_name": "com.clevertap.expo.demo"
+  },
+  "configuration_version": "3.0"
 }
