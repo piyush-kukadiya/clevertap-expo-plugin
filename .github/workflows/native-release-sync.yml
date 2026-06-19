@@ -63,6 +63,8 @@ jobs:
       base_ref:             ${{ inputs.base_ref }}
       model:                ${{ inputs.model }}
       skip_sync:            ${{ inputs.skip_sync }}
+      # Expo SDK 55 / RN 0.83 need macos-15's newer Xcode/Swift to build expo-modules-core.
+      runs_on:              macos-15
       # TESTING: check out the hub's composite actions/tools from the feature branch.
       # Remove this line for the production PR (then @v1's default branch is used).
       tooling_ref:          task/expo-wrapper-sync
