@@ -73,7 +73,7 @@
             "buildReactNativeFromSource": true
           },
           "android": {
-            "enableProguardInReleaseBuilds": true
+            "enableMinifyInReleaseBuilds": true
           }
         }
       ],
