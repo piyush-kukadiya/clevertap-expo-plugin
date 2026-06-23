@@ -1,6 +1,6 @@
 ---
 name: example-and-release
-description: How to finish a CleverTap Expo plugin release sync — update the CTExample app (app.json + package.json), append a row to the README compatibility matrix, write the CHANGELOG entry in the exact existing format, choose the plugin's semver bump, and verify with the compile-only build loop (yalc + expo prebuild + gradle/xcodebuild). Use at the end of a release sync.
+description: How to finish a CleverTap Expo plugin release sync — update the CTExample app (app.json + package.json), showcase any NEW clevertap-react-native APIs as runnable demo buttons in CTExample, append a row to the README compatibility matrix, write the CHANGELOG entry in the exact existing format, choose the plugin's semver bump, and verify with the compile-only build loop (yalc + expo prebuild + gradle/xcodebuild). Use at the end of a release sync.
 ---
 
 # Example app + release finishing steps
@@ -21,6 +21,59 @@ plus `"expo": { "autolinking": { "nativeModulesDir": ".." } }`).
 - `CTExample/app.json` — if the sync added a new feature flag / config field, reflect
   it in the plugin config block so the demo keeps exercising it. Don't change the test
   credentials.
+
+## 1b. Showcase NEW clevertap-react-native APIs in CTExample
+
+The plugin itself surfaces no SDK methods — but the CTExample app is a living showcase,
+so when the target `clevertap-react-native` release adds **new public APIs**, add a
+runnable demo button for each so the example stays current. These are pure JS edits in
+the example app (no plugin/native code).
+
+**Where the new APIs come from:** the `clevertap-react-native` changelog's **"API changes"**
+section (available in `expo-diff.json` → `changelogs.rn`). It lists each new method with
+its exact signature, e.g. `fetchInbox(callback?)`, `pushDisplayUnitElementClickedEventForID(unitID, additionalProperties)`.
+Only surface entries under "API changes" (or clearly-new public methods) — NOT bug fixes
+or internal changes.
+
+**Source-verify before adding (IMPORTANT):** a wrong method name becomes a runtime-broken
+button (the native compile gate will NOT catch it — JS isn't type-checked there). Confirm
+the method actually exists in `clevertap-react-native` at the target version. The
+authoritative sources are (a) the changelog's "API changes" section, which states the exact
+new method + signature for that release, and (b) the RN repo's `src/index.js` / `index.d.ts`
+**at the `${RN_VERSION}` tag** via WebFetch (`https://raw.githubusercontent.com/CleverTap/clevertap-react-native/${RN_VERSION}/src/index.js`).
+Do NOT rely on `CTExample/node_modules/clevertap-react-native` — during the sync it still
+holds the PRE-sync version (the target version is only installed in the later post-sync
+build), so a genuinely-new method won't be there yet. If you can't confirm a method from
+the changelog or the tagged source, do NOT add a demo for it — flag it instead.
+
+**The 3-file demo pattern (match the existing entries exactly):**
+1. `CTExample/constants.js` — add a key to the `Actions` object: `NEW_API_KEY: 'NEW_API_KEY',`.
+2. `CTExample/App.js` —
+   - add `{ action: Actions.NEW_API_KEY, name: '<methodName>' }` to the `subCategory` of the
+     most relevant existing `accordionData` category (e.g. App Inbox, Native Display, Events);
+   - add a `case Actions.NEW_API_KEY:` in the `handleItemAction` switch that calls
+     `CleverTap.<method>(...)` with **realistic sample args**, then `break;`.
+3. `CTExample/app-utils.js` — only for multi-step or feedback-bearing demos: add an
+   `export const <helper> = () => { ... showToast(...) + console.log(...) + CleverTap.<method>(...) }`
+   and call `AppUtils.<helper>()` from the switch (simple fire-and-forget calls can go inline
+   in the switch, like `CleverTap.suspendInAppNotifications()`).
+
+Use `const CleverTap = require('clevertap-react-native')` (already imported in App.js).
+For callback-style APIs, pass a callback that `console.log`s the result, mirroring existing
+cases like `getVariables` / `fetchVariables`. Example for the 4.2.0 additions:
+```js
+// constants.js
+FETCH_INBOX: 'FETCH_INBOX',
+// App.js — App Inbox category subCategory
+{ action: Actions.FETCH_INBOX, name: 'fetchInbox' },
+// App.js — handleItemAction switch
+case Actions.FETCH_INBOX:
+  CleverTap.fetchInbox((err, success) => { console.log('fetchInbox result:', success, err); });
+  break;
+```
+
+Record each demoed API in the `apis_demoed` output field. These edits to
+`constants.js` / `App.js` / `app-utils.js` are real source changes and DO belong in the PR.
 
 ## 2. README compatibility matrix
 
