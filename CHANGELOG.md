@@ -1,6 +1,19 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+### [Version 2.0.0](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/2.0.0) (June 22, 2026)
+
+#### Added
+- Adds support for Expo SDK [56.0.0](https://expo.dev/changelog/sdk-56) and React Native [0.85](https://github.com/facebook/react-native/releases/tag/v0.85.0)
+- Adds support for CleverTap React Native SDK [4.2.0](https://github.com/CleverTap/clevertap-react-native/blob/master/CHANGELOG.md#version-420-june-5-2026)
+
+#### Android Platform ####
+  - **Breaking:** CleverTap Android SDK 8.1.0 raises the minimum Android API level from 21 to 23 (Android 6.0) — apps targeting API 21 or 22 must update `minSdkVersion`.
+  - Upgrades CleverTap Push Templates SDK to [2.4.0](https://github.com/CleverTap/clevertap-android-sdk/blob/master/docs/CTPUSHTEMPLATESCHANGELOG.md).
+
+#### iOS Platform ####
+  - **Breaking:** Minimum iOS deployment target raised from 11.0 to 16.4, required by Expo SDK 56. Apps must target iOS 16.4+.
+
 ### [Version 1.0.0](https://github.com/CleverTap/clevertap-expo-plugin/releases/tag/1.0.0) (March 26, 2026)
 
 #### Added
