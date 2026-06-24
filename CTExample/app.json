@@ -7,7 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -26,8 +25,12 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.clevertap.expo.demo",
-      "googleServicesFile":"./assets/google-services.json",
-      "permissions": ["android.permission.ACCESS_NETWORK_STATE","android.permission.INTERNET","android.permission.POST_NOTIFICATIONS"]
+      "googleServicesFile": "./assets/google-services.json",
+      "permissions": [
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.INTERNET",
+        "android.permission.POST_NOTIFICATIONS"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -38,9 +41,9 @@
       [
         "@clevertap/clevertap-expo-plugin",
         {
-          "accountId": "YOUR ACCT ID",
-          "accountToken": "YOUR ACCT TOKEN",
-          "accountRegion": "YOUR ACCT REGION",
+          "accountId": "TEST-46W-WWR-R85Z",
+          "accountToken": "TEST-200-064",
+          "accountRegion": "eu1",
           "disableAppLaunchedEvent": false,
           "logLevel": 3,
           "ios": {
@@ -52,7 +55,7 @@
               "notificationCategories": [
                 {
                   "identifier": "CTNotification",
-                  "actions": [ ]
+                  "actions": []
                 }
               ]
             }

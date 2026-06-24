@@ -11,7 +11,6 @@
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
-    "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module",
     "open:ios": "xed example/ios",
@@ -26,15 +25,10 @@
   "author": "CleverTap",
   "license": "MIT",
   "homepage": "https://github.com/CleverTap/clevertap-expo-plugin#readme",
-  "devDependencies": {
-    "@types/fs-extra": "^11.0.4",
-    "expo": "48.0.0",
-    "expo-module-scripts": "^3.0.4",
-    "typescript": "^5.8.2"
-  },
   "peerDependencies": {
     "expo": "*",
     "react": "*",
     "react-native": "*"
-  }
+  },
+  "yalcSig": "a1eb43b788bce54e794e3c9ffb21239c"
 }
