@@ -257,6 +257,7 @@ export default class App extends Component {
           action: Actions.INBOX_NOTIFICATION_CLICKED,
           name: 'pushInboxNotificationClickedEvent',
         },
+        { action: Actions.FETCH_INBOX, name: 'fetchInbox' },
       ],
     },
     {
@@ -331,6 +332,7 @@ export default class App extends Component {
       subCategory: [
         { action: Actions.DISPLAY_UNIT_ID, name: 'getUnitID' },
         { action: Actions.ALL_DISPLAY_UNITS, name: 'getAllDisplayUnits' },
+        { action: Actions.DISPLAY_UNIT_ELEMENT_CLICKED, name: 'pushDisplayUnitElementClickedEventForID' },
       ],
     },
     {
@@ -493,6 +495,11 @@ export default class App extends Component {
       case Actions.INBOX_NOTIFICATION_CLICKED:
         AppUtils.pushInboxNotificationClicked();
         break;
+      case Actions.FETCH_INBOX:
+        CleverTap.fetchInbox((err, success) => {
+          console.log('fetchInbox result: ', success, err);
+        });
+        break;
       case Actions.PUSH_EVENT:
         AppUtils.pushevent();
         break;
@@ -537,6 +544,11 @@ export default class App extends Component {
         break;
       case Actions.ALL_DISPLAY_UNITS:
         AppUtils.getAllDisplayUnits();
+        break;
+      case Actions.DISPLAY_UNIT_ELEMENT_CLICKED:
+        CleverTap.pushDisplayUnitElementClickedEventForID('display_unit_id', {
+          wzrk_element_id: 'cta_button',
+        });
         break;
       case Actions.PRODUCT_CONFIG_FETCH:
         AppUtils.fetch();
